@@ -1,4 +1,31 @@
 /*=============================================
+ALTURA COL1          
+=============================================*/
+
+var alturaBody = $("body").height();
+
+if(alturaBody < 1020 && window.innerWidth > 767){
+    
+	$("#col1").css({"height":"150vh"})
+}
+if(alturaBody > 1020 && window.innerWidth > 767){
+	$("#col1").css({"height":alturaBody+"px"})
+}
+
+/*=====  Fin de ALTURA COL1  ======*/
+
+/*=============================================
+BOTONES ADMINISTRADOR          
+=============================================*/
+$("p#member span").click(function(){
+	$("#cabezote #admin").slideToggle("fast")
+	$("p#member span").toggleClass("fa-chevron-down");
+	$("p#member span").toggleClass("fa-chevron-up");
+})
+
+/*=====  Fin de BOTONES ADMINISTRADOR  ======*/
+
+/*=============================================
 SLIDE            
 =============================================*/
 var numeroSlide = 1;
@@ -98,7 +125,7 @@ setInterval(function(){
 GALERÍA         
 =============================================*/
 
-$("#galeria ul li a").fancybox({
+$("ul#lightbox li a").fancybox({
 
 	openEffect  : 'elastic',
 	closeEffect  : 'elastic',
@@ -111,30 +138,96 @@ $("#galeria ul li a").fancybox({
 /*=====  Fin de GALERÍA   ======*/
 
 /*=============================================
-SCROLL      
+BUSCADOR         
 =============================================*/
 
-$("nav#botonera ul li a").click(function(e){
-
-	e.preventDefault();
-
-	var href = $(this).attr("href");
-
-	$(href).animatescroll({
-
-		scrollSpeed:2000,
-		easing:"easeOutBounce"
-
-	});
-
+$('#tablaSuscriptores').DataTable({
+	"language": {
+            "sProcessing":     "Procesando...",
+			"sLengthMenu":     "Mostrar _MENU_ registros",
+			"sZeroRecords":    "No se encontraron resultados",
+			"sEmptyTable":     "Ningún dato disponible en esta tabla",
+			"sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+			"sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+			"sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+			"sInfoPostFix":    "",
+			"sSearch":         "Buscar:",
+			"sUrl":            "",
+			"sInfoThousands":  ",",
+			"sLoadingRecords": "Cargando...",
+			"oPaginate": {
+				"sFirst":    "Primero",
+				"sLast":     "Último",
+				"sNext":     "Siguiente",
+				"sPrevious": "Anterior"
+			},
+			"oAria": {
+				"sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+				"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+			}
+        }
 });
 
-$.scrollUp({
+/*=====  Fin de BUSCADOR   ======*/
 
-	scrollText:"",
-	scrollSpeed: 1500,
-	easingType: "easeOutBounce"
+/*=============================================
+ORDENAR SLIDE     
+=============================================*/
 
-});
+/* Ordenar Slide */
+var almacenarOrdenImagen = new Array();
+var cambioOrdenImagen = false;
 
-/*=====  Fin de SCROLL   ======*/
+$("#ordenarSlide").click(function(){
+
+	$( "#columnasSlide").css({"cursor":"move"})
+	$( "#columnasSlide span").hide()
+		 
+	$( "#columnasSlide").sortable({
+      	revert: true,
+      	connectWith: ".bloqueSlide",
+      	handle: ".handleImg",	
+      	stop: function( event, ui ) {
+
+      	cambioOrdenImagen = true;
+
+      	for(var i= 0; i < $( "#columnasSlide li").length; i++){
+
+      		almacenarOrdenImagen[i] = event.target.children[i].children[1].src;
+      		
+      		}
+      	}
+    })
+
+    $("#ordenarSlide").hide();
+    $("#guardarSlide").show();
+
+})
+
+/* Guardar Orden Slide */ 
+
+$("#guardarSlide").click(function(){
+
+	if(cambioOrdenImagen){
+
+		$("#textoSlide ul").html("")
+
+		for(var i= 0; i < $( "#columnasSlide li").length; i++){
+
+	      	$("#textoSlide ul").append('<li><span class="fa fa-pencil" style="background:blue"></span><img src="'+almacenarOrdenImagen[i]+'" style="float:left; margin-bottom:10px" width="80%"><h1></h1><p></p></li>')
+	      	}
+     }
+
+	$("#columnasSlide").css({"cursor":"auto"})
+	$("#columnasSlide span").show()
+
+	$("#columnasSlide").disableSelection();
+
+	$("#ordenarSlide").show();
+
+	$("#guardarSlide").hide();
+
+})
+
+
+/*=====  Fin de ORDENAR SLIDE   ======*/
